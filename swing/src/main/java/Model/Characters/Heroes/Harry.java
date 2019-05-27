@@ -6,11 +6,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class bob extends character {
+public class Harry extends character {
 
-
-    public bob(int level, int HP, int XP, int Attack, int Defense, String type) {
-        super(level, HP, XP, Attack, Defense, type);
+    String Weapon;
+    public Harry(int level, int HP, int XP) {
+        super(level, HP, XP, 600, 400, "H");
+        this.Weapon = "Wand";
     }
 
 
