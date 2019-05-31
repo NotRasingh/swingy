@@ -23,5 +23,5 @@ public abstract class character {
         this.type = type;
     }
 
-    public abstract boolean inBattle(int Value);
+//    public abstract boolean inBattle(int Value);
  }

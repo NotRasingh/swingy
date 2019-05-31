@@ -1,6 +1,6 @@
 import Model.Characters.Heroes.Harry;
 import Model.Characters.Villains.Kyle;
-import Model.Map;
+import Model.Map.Map;
 
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,11 +20,14 @@ public class swingy {
         if (first.equals("1")) {
             Harry Hero = new Harry(1, 100, 1000);
             System.out.println("WELCOME TO HOGWARTS " + String.valueOf(Hero.getClass()).substring(String.valueOf(Hero.getClass()).lastIndexOf('.') + 1));
+        // INSERT NEW HERO TO DB
         }
         if (first.equals("2")) {
             System.out.println("FUNCTIONALITY ONLY AVAILABLE IN NEXT UPDATE");
             System.exit(0);
-
+            ///PROMPT USER FOR HERO NAME
+            ///LOAD HERO STATS FROM DB IF EXISTS
+            /// CREATE NEW INSTANCE OF HERO CLASS BASED ON LOADED STATS
         }
 
 //Character Instantiation
@@ -78,6 +81,7 @@ public class swingy {
             }
             if ((x == size - 1 || y == size - 1 || x == 0 || y == 0) && (layout[y][x] == "." || layout[y][x] == "H")) {
                 System.out.println("WINNER WINNER CHICKEN DINNER");
+                /// SAVE PLAYERS PROGRESS
                 System.exit(0);
             }
             run = false;
@@ -150,32 +154,46 @@ public class swingy {
                 if (Villains[fighter].getHP() <= 0) {
 
                     int artifact = 0;
-                    if ( ThreadLocalRandom.current().nextInt(0,100) % 3 == 0)
-                    {
-                        long incAttack = ThreadLocalRandom.current().nextLong(Math.round(Hero.getAttack() * 0.10) ,Math.round(Hero.getAttack() * 0.25 ));
-                        long incDefense = ThreadLocalRandom.current().nextLong(Math.round(Hero.getDefense() * 0.10) ,Math.round(Hero.getDefense() * 0.25 ));
-                        long incHP = ThreadLocalRandom.current().nextLong(Math.round(Hero.getHP() * 0.10) ,Math.round(Hero.getHP() * 0.25 ));
-                        System.out.println("Raid the Villains lifeless body.");
-                        System.out.println("Pick one of the 3 artifacts below: ");
-                        System.out.println("[1] Weapon : Increase attack by " +  incAttack);
-                        System.out.println("[2]Armor : Increase defense by "+ incDefense);
-                        System.out.println("[3]Helm : Increase HP by "+ incHP);
-                    scan = new Scanner(System.in);
-                    first = scan.next();
-                    if (first.equals('1')) {
-                        
-                    }
-                    }
                     System.out.println("Remaining Health: " + Hero.getHP());
                     System.out.println("U WIN");
                     layout[VillainCoords[fighter][1]][VillainCoords[fighter][0]] = Hero.getType();
                     run = true;
                     layout[old_y][old_x] = ".";
                     Hero.setXP(Hero.getXP() + (Villains[fighter].getAttack()));
-                    System.out.println("New XP" + Hero.getXP());
+                    System.out.println("New XP: " + Hero.getXP());
+                    if ( ThreadLocalRandom.current().nextInt(0,100) % 2 == 0)
+                    {
+//                        long incAttack = ThreadLocalRandom.current().nextLong(Math.round(Hero.getAttack() * 0.10) ,Math.round(Hero.getAttack() * 0.25 ));
+//                        long incDefense = ThreadLocalRandom.current().nextLong(Math.round(Hero.getDefense() * 0.10) ,Math.round(Hero.getDefense() * 0.25 ));
+//                        long incHP = ThreadLocalRandom.current().nextLong(Math.round(Hero.getHP() * 0.10) ,Math.round(Hero.getHP() * 0.25 ));
+                        System.out.println("Raid the Villains lifeless body.");
+                        System.out.println("Pick one of the 3 artifacts below: ");
+                        System.out.println("[1] Weapon : Increase attack by 150");
+                        System.out.println("[2]Armor : Increase defense by 150");
+                        System.out.println("[3]Helm : Increase HP by 150");
+                    scan = new Scanner(System.in);
+                    first = scan.next();
+                    System.out.println("FIRST SCAN : "+ first);
+                    System.out.println("MOVE SCAN : "+ move);
+                    if (first.equals("1")) {
+                        System.out.println("OLD ATTACK: "+ Hero.getAttack());
+                        Hero.setAttack(Hero.getAttack() + 150);
+                        System.out.println("New ATTACK: "+ Hero.getAttack());
+                    }
+                    if (first.equals("2")) {
+                        System.out.println("OLD DEFENSE: "+ Hero.getDefense());
+                        Hero.setDefense(Hero.getDefense() + 150);
+                        System.out.println("NEW DEFENSE: "+ Hero.getDefense());
+                    }
+                    if (first.equals("3")) {
+                        System.out.println("OLD HP: "+ Hero.getHP());
+                        Hero.setHP(Hero.getHP() + 150);
+                        System.out.println("NEW HP: "+ Hero.getHP());
+                    }
+                    }
                     if (Hero.getXP() >= (((Hero.getLevel() + 1) * 1000) + (Math.pow(Hero.getLevel(), 2) * 450))) {
                         System.out.println("CONGRATULATIONS, YOU LEVELED UP");
-                        //REGNERATE MAP AND RECENTER HERO
+                        //REGENERATE MAP AND RECENTER HERO
                         Hero.setLevel(Hero.getLevel() + 1);
                         map = new Map(Hero.getLevel());
                         layout = map.getLayout();
@@ -204,6 +222,7 @@ public class swingy {
                             VillainCoords[i][1] = rdm_y;
 
                         }
+                        /// UPDATE PLAYERS PROGRESS IN DB/TXTFILE
                     }
                 }
                 /// END BATTLE CODE

@@ -15,13 +15,13 @@ public class Harry extends character {
     }
 
 
-    @Override
-    public boolean inBattle(int Value) {
-        if (Value == 1)
-            return true;
-        else
-            return false;
-    }
+//    @Override
+//    public boolean inBattle(int Value) {
+//        if (Value == 1)
+//            return true;
+//        else
+//            return false;
+//    }
 
     public static int InitialCoordinates(int size) {
         double result = (double)size/2;

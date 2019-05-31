@@ -9,10 +9,10 @@ public class Kyle extends character {
         super(level, HP, XP, Attack, Defense, type);
     }
 
-    public boolean inBattle(int Value) {
-        if (Value == 1)
-            return true;
-        else
-            return false;
-    }
+//    public boolean inBattle(int Value) {
+//        if (Value == 1)
+//            return true;
+//        else
+//            return false;
+//    }
 }
