@@ -15,6 +15,7 @@ public class Harry extends character {
 
     private int HeroCoordinates[] = new int[2];
     String Weapon;
+
     public Harry(int level, int HP, int XP) {
         super(level, HP, XP, 600, 400, "H");
         this.Weapon = "Wand";
@@ -30,8 +31,8 @@ public class Harry extends character {
 //    }
 
     public static int InitialCoordinates(int size) {
-        double result = (double)size/2;
-        int fin = (int)result;
+        double result = (double) size / 2;
+        int fin = (int) result;
         return fin;
     }
 
@@ -41,8 +42,7 @@ public class Harry extends character {
     }
 
 
-
-    public boolean fight(Kyle Vil, int[][] VillainCoords, int fighter,Map map, int old_x, int old_y, int  x, int y, int size){
+    public boolean fight(Kyle Vil, int[][] VillainCoords, int fighter, Map map, int old_x, int old_y, int x, int y, int size) {
         int hit = 1;
         String[][] layout = map.getLayout();
         while (this.getHP() > 0 && Vil.getHP() > 0) {
@@ -89,8 +89,7 @@ public class Harry extends character {
             //run = true; MIGHT BE IMPORTANT
             this.setXP(this.getXP() + (Vil.getAttack()));
             System.out.println("New XP: " + this.getXP());
-            if ( ThreadLocalRandom.current().nextInt(0,100) % 2 == 0)
-            {
+            if (ThreadLocalRandom.current().nextInt(0, 100) % 2 == 0) {
 //                        long incAttack = ThreadLocalRandom.current().nextLong(Math.round(Hero.getAttack() * 0.10) ,Math.round(Hero.getAttack() * 0.25 ));
 //                        long incDefense = ThreadLocalRandom.current().nextLong(Math.round(Hero.getDefense() * 0.10) ,Math.round(Hero.getDefense() * 0.25 ));
 //                        long incHP = ThreadLocalRandom.current().nextLong(Math.round(Hero.getHP() * 0.10) ,Math.round(Hero.getHP() * 0.25 ));
@@ -104,19 +103,19 @@ public class Harry extends character {
 //                System.out.println("FIRST SCAN : "+ first);
 //                System.out.println("MOVE SCAN : "+ move);
                 if (first.equals("1")) {
-                    System.out.println("OLD ATTACK: "+ this.getAttack());
+                    System.out.println("OLD ATTACK: " + this.getAttack());
                     this.setAttack(this.getAttack() + 150);
-                    System.out.println("New ATTACK: "+ this.getAttack());
+                    System.out.println("New ATTACK: " + this.getAttack());
                 }
                 if (first.equals("2")) {
-                    System.out.println("OLD DEFENSE: "+ this.getDefense());
+                    System.out.println("OLD DEFENSE: " + this.getDefense());
                     this.setDefense(this.getDefense() + 150);
-                    System.out.println("NEW DEFENSE: "+ this.getDefense());
+                    System.out.println("NEW DEFENSE: " + this.getDefense());
                 }
                 if (first.equals("3")) {
-                    System.out.println("OLD HP: "+ this.getHP());
+                    System.out.println("OLD HP: " + this.getHP());
                     this.setHP(this.getHP() + 150);
-                    System.out.println("NEW HP: "+ this.getHP());
+                    System.out.println("NEW HP: " + this.getHP());
                 }
             }
             if (this.getXP() >= (((this.getLevel() + 1) * 1000) + (Math.pow(this.getLevel(), 2) * 450))) {

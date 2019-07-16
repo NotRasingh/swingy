@@ -7,32 +7,13 @@ import View.messages;
 
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class swingy {
 
 
     public static void main(String[] args) {
         messages Messages = new messages();
-        System.out.println("__________");
-        System.out.println("WELCOME");
-        System.out.println("__________");
-        System.out.println("CREATE A HERO[1]");
-        System.out.println("LOAD A HERO[2]");
-        Scanner scan = new Scanner(System.in);
-        String first = scan.next();
-        if (first.equals("1")) {
-            Harry Hero = new Harry(1, 100, 1000);
-            System.out.println("WELCOME TO HOGWARTS " + String.valueOf(Hero.getClass()).substring(String.valueOf(Hero.getClass()).lastIndexOf('.') + 1));
-        // INSERT NEW HERO TO DB
-        }
-        if (first.equals("2")) {
-            System.out.println("FUNCTIONALITY ONLY AVAILABLE IN NEXT UPDATE");
-            System.exit(0);
-            ///PROMPT USER FOR HERO NAME
-            ///LOAD HERO STATS FROM DB IF EXISTS
-            /// CREATE NEW INSTANCE OF HERO CLASS BASED ON LOADED STATS
-        }
+        Messages.Intro();
 
 //Character Instantiation
 
@@ -41,8 +22,6 @@ public class swingy {
         Map map = new Map(Hero.getLevel());
         String[][] layout = map.getLayout();
         int size = map.getSize();
-
-        System.out.println("Enter 1 to quit");
         boolean gameActive = true;// keeps track of if game is active when program needs to stop
         Scanner in = new Scanner(System.in);
         int x = Harry.InitialCoordinates(map.getSize());
@@ -88,12 +67,12 @@ public class swingy {
                 /// SAVE PLAYERS PROGRESS
                 System.exit(0);
             }
-                int fighter = 0;
+            int fighter = 0;
             run = false;
             String move = in.next();
             ///// BATTLE STARTS
             if (move.equals("b")) {
-               Messages.PrintStartBattle();
+                Messages.PrintStartBattle();
                 /// COMMENCE BATTLE HERE
                 for (int i = 0; i < size; i++) {
                     if (x == VillainCoords[i][0] && y == VillainCoords[i][1]) {
@@ -101,7 +80,7 @@ public class swingy {
                         break;
                     }
                 }
-                Messages.PrintVilStats(Villains[fighter].getAttack(),Villains[fighter].getDefense());
+                Messages.PrintVilStats(Villains[fighter].getAttack(), Villains[fighter].getDefense());
                 run = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y, x, y, size);
             }
             if (move.equals("r")) {
@@ -120,7 +99,7 @@ public class swingy {
                         }
                     }
                     System.out.println("NAH FAM");
-                    Messages.PrintVilStats(Villains[fighter].getAttack(),Villains[fighter].getDefense());
+                    Messages.PrintVilStats(Villains[fighter].getAttack(), Villains[fighter].getDefense());
                     run = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y, x, y, size);
                 }
             }
