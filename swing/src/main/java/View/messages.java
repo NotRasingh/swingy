@@ -9,9 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 public class messages {
 
-
+utils Utils = new utils();
     public void PrintWinMessage(){
         System.out.println("WINNER WINNER CHICKEN DINNER");
+        Utils.SavePlayer(hero);
     }
 
     public void PrintVilStats(int Att, int Def){
@@ -54,10 +55,9 @@ public class messages {
             System.out.println("Working Directory = " +
                     System.getProperty("user.dir") + "\n");
 //            Scanner scan = new Scanner(System.in);
-            System.out.println("Enter your Hero name: \n");
-            first = scan.next();
-            Utils.SaveNewPlayer(first);
+
             Harry Hero = new Harry(1, 100, 1000);
+            Utils.SaveNewPlayer(Hero);
 //            System.out.printf("WELCOME TO HOGWARTS %s%n", String.valueOf(Model.Characters.Heroes.Hero.getClass()).substring(String.valueOf(Hero.getClass()).lastIndexOf('.') + 1));
             System.out.printf("WELCOME \n");
             // INSERT NEW HERO TO DB

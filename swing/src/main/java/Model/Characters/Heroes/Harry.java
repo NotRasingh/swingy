@@ -2,6 +2,7 @@ package Model.Characters.Heroes;
 
 import Model.Characters.character;
 import Model.Characters.Villains.Kyle;
+import Model.Characters.utils;
 import Model.Map.Map;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +14,10 @@ import java.util.concurrent.ThreadLocalRandom;
 @Setter
 public class Harry extends character {
 
+    utils Utils = new utils();
     private int HeroCoordinates[] = new int[2];
     String Weapon;
+
 
     public Harry(int level, int HP, int XP) {
         super(level, HP, XP, 600, 400, "H");
@@ -77,6 +80,7 @@ public class Harry extends character {
         }
         if (this.getHP() <= 0) {
             System.out.println("U DEAD");
+            Utils.SavePlayer(this);
             System.exit(0);
         }
         if (Vil.getHP() <= 0) {
