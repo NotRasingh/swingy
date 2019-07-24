@@ -24,4 +24,13 @@ public class WriteFile {
         print_line.printf( "%s" + "%n" , textLine);
         print_line.close();
     }
+
+    public static void clearFile(String FileName) throws IOException {
+        FileWriter fwOb = new FileWriter(FileName, false);
+        PrintWriter pwOb = new PrintWriter(fwOb, false);
+        pwOb.flush();
+        pwOb.close();
+        fwOb.close();
+    }
 }
+

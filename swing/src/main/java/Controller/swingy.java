@@ -13,11 +13,11 @@ public class swingy {
 
     public static void main(String[] args) {
         messages Messages = new messages();
-        Messages.Intro();
+        Harry Hero = Messages.Intro();
 
 //Character Instantiation
 
-        Harry Hero = new Harry(1, 1000, 1000);///remove when above if stmt is completed
+//        Harry Hero = new Harry(1, 1000, 1000);///remove when above if stmt is completed
 //Map Instantiation
         Map map = new Map(Hero.getLevel());
         String[][] layout = map.getLayout();
@@ -63,7 +63,7 @@ public class swingy {
                 map.PrintMap();
             }
             if ((x == size - 1 || y == size - 1 || x == 0 || y == 0) && (layout[y][x] == "." || layout[y][x] == "H")) {
-                Messages.PrintWinMessage();
+                Messages.PrintWinMessage(Hero);
                 /// SAVE PLAYERS PROGRESS
                 System.exit(0);
             }

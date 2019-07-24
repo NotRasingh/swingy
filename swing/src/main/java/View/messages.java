@@ -4,15 +4,20 @@ import Model.Characters.Heroes.Harry;
 import Model.Characters.Heroes.Hero;
 import Model.Characters.utils;
 
+import java.util.Dictionary;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class messages {
 
-utils Utils = new utils();
-    public void PrintWinMessage(){
+
+utils Utils;
+
+    public void PrintWinMessage(Harry hero){
         System.out.println("WINNER WINNER CHICKEN DINNER");
-        Utils.SavePlayer(hero);
+        hero.setLevel(hero.getLevel() +1);
+        hero.setXP((int) (((hero.getLevel() + 1) * 1000) + (Math.pow(hero.getLevel(), 2) * 450)));
+        Utils.getUtils().SavePlayer(hero);
     }
 
     public void PrintVilStats(int Att, int Def){
@@ -41,9 +46,10 @@ utils Utils = new utils();
         }
     }
 
-    public void Intro(){
+    public Harry Intro(){
 
         utils Utils = new utils();
+        Harry Hero = new Harry();
         System.out.println("__________");
         System.out.println("WELCOME");
         System.out.println("__________");
@@ -55,21 +61,19 @@ utils Utils = new utils();
             System.out.println("Working Directory = " +
                     System.getProperty("user.dir") + "\n");
 //            Scanner scan = new Scanner(System.in);
-
-            Harry Hero = new Harry(1, 100, 1000);
-            Utils.SaveNewPlayer(Hero);
+            Hero = new Harry(1, 1000, 1000);
+            Utils.getUtils().SaveNewPlayer(Hero);
 //            System.out.printf("WELCOME TO HOGWARTS %s%n", String.valueOf(Model.Characters.Heroes.Hero.getClass()).substring(String.valueOf(Hero.getClass()).lastIndexOf('.') + 1));
             System.out.printf("WELCOME \n");
             // INSERT NEW HERO TO DB
         }
         if (first.equals("2")) {
-            System.out.println("FUNCTIONALITY ONLY AVAILABLE IN NEXT UPDATE");
-            Utils.LoadPlayer();
-            System.exit(0);
-            ///PROMPT USER FOR HERO NAME
-            ///LOAD HERO STATS FROM DB IF EXISTS
+           String[] Stats = Utils.LoadPlayer();
+            Hero = new Harry(Integer.parseInt(Stats[1]), Integer.parseInt(Stats[2]),Integer.parseInt(Stats[3]), Integer.parseInt(Stats[4]), Integer.parseInt(Stats[5]), Stats[6]);
+            System.out.printf("WELCOME \n");
             /// CREATE NEW INSTANCE OF HERO CLASS BASED ON LOADED STATS
         }
         System.out.println("Enter 1 to quit\n");
+        return (Hero);
     }
 }

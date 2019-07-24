@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Setter
 public class Harry extends character {
 
-    utils Utils = new utils();
+    utils Utils;
     private int HeroCoordinates[] = new int[2];
     String Weapon;
 
@@ -22,6 +22,16 @@ public class Harry extends character {
     public Harry(int level, int HP, int XP) {
         super(level, HP, XP, 600, 400, "H");
         this.Weapon = "Wand";
+    }
+
+
+    public Harry(int level, int HP, int XP, int Attack, int Defense, String Type) {
+        super(level, HP, XP, Attack, Defense, Type);
+        this.Weapon = "Wand";
+    }
+
+    public Harry() {
+        super();
     }
 
 
@@ -80,8 +90,12 @@ public class Harry extends character {
         }
         if (this.getHP() <= 0) {
             System.out.println("U DEAD");
-            Utils.SavePlayer(this);
+            this.setHP(1000);
+            Utils.getUtils().SavePlayer(this);
             System.exit(0);
+        }
+        if (this.getDefense() < 0){
+            this.setDefense(0);
         }
         if (Vil.getHP() <= 0) {
 

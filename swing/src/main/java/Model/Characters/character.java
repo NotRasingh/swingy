@@ -14,6 +14,17 @@ public abstract class character {
     private int Defense;
     private String type;
 
+    public character() {}
+
+    public character(int level, int HP, int XP, int Attack, int Defense, String type){
+        this.Level = level;
+        this.HP = HP;
+        this.XP = XP;
+        this.Attack = Attack;
+        this.Defense = Defense;
+        this.type = type;
+    }
+
     public int getLevel() {
         return Level;
     }
@@ -62,14 +73,6 @@ public abstract class character {
         this.type = type;
     }
 
-    public character(int level, int HP, int XP, int Attack, int Defense, String type){
-        this.Level = level;
-        this.HP = HP;
-        this.XP = XP;
-        this.Attack = Attack;
-        this.Defense = Defense;
-        this.type = type;
-    }
 
 //    public abstract boolean inBattle(int Value);
  }
