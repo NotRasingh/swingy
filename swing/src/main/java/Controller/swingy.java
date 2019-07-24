@@ -55,6 +55,7 @@ public class swingy {
         while (gameActive) {
             if (layout[y][x] != "." && layout[y][x] != "H") {
                 System.out.println("BATTLE[B] OR RUN[R]");
+
             } else {
                 layout[y][x] = Hero.getType();
                 if (!run) {

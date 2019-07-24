@@ -1,10 +1,8 @@
 package View;
 
 import Model.Characters.Heroes.Harry;
-import Model.Characters.Heroes.Hero;
 import Model.Characters.utils;
 
-import java.util.Dictionary;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
