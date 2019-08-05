@@ -4,14 +4,10 @@ import Model.Characters.character;
 import Model.Characters.Villains.Kyle;
 import Model.Characters.utils;
 import Model.Map.Map;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Getter
-@Setter
 public class Harry extends character {
 
     utils Utils;
@@ -19,8 +15,8 @@ public class Harry extends character {
     String Weapon;
 
 
-    public Harry(int level, int HP, int XP) {
-        super(level, HP, XP, 600, 400, "H");
+    public Harry() {
+        super(1,  1000, 1000, 600, 400, "H");
         this.Weapon = "Wand";
     }
 
@@ -30,9 +26,9 @@ public class Harry extends character {
         this.Weapon = "Wand";
     }
 
-    public Harry() {
-        super();
-    }
+//    public Harry() {
+//        super();
+//    }
 
 
 //    @Override
@@ -55,7 +51,7 @@ public class Harry extends character {
     }
 
 
-    public boolean fight(Kyle Vil, int[][] VillainCoords, int fighter, Map map, int old_x, int old_y, int x, int y, int size) {
+    public Map fight(Kyle Vil, int[][] VillainCoords, int fighter, Map map, int old_x, int old_y) {
         int hit = 1;
         String[][] layout = map.getLayout();
         while (this.getHP() > 0 && Vil.getHP() > 0) {
@@ -142,35 +138,46 @@ public class Harry extends character {
                 this.setLevel(this.getLevel() + 1);
                 map = new Map(this.getLevel());
                 layout = map.getLayout();
-                size = map.getSize();
-                x = InitialCoordinates(map.getSize());
-                old_x = 0;
-                old_y = 0;
-                y = x;
+                int size = map.getSize();
+                map.setX(InitialCoordinates(map.getSize()));
+                int x = map.getX() ;
+                map.setY(map.getX());
+                int y = map.getY();
 //REGENERATE VILLAINS FOR LEVEL UP
-                VillainCoords = new int[size][2];
-                Kyle Villains[] = new Kyle[size];
-                for (int i = 0; i < size; i++) {
-                    Villains[i] = new Kyle(this.getLevel(), this.getHP(), this.getXP(), ThreadLocalRandom.current().nextInt(this.getAttack() - 50, this.getAttack() - 25), ThreadLocalRandom.current().nextInt(this.getDefense() - 75, this.getDefense() - 50), "V");
-                    int rdm_x = x;
-                    int rdm_y = y;
-                    while (rdm_x == x || rdm_y == y) {
-                        rdm_x = ThreadLocalRandom.current().nextInt(0, size);
-                        rdm_y = ThreadLocalRandom.current().nextInt(0, size);
-                        if (layout[rdm_y][rdm_x] != ".") {
-                            rdm_x = x;
-                            rdm_y = y;
-                        }
-                    }
-                    layout[rdm_y][rdm_x] = Villains[i].getType();
-                    VillainCoords[i][0] = rdm_x;
-                    VillainCoords[i][1] = rdm_y;
-
-                }
                 /// UPDATE PLAYERS PROGRESS IN DB/TXTFILE
             }
         }
-        return true;
+         return map;
         /// END BATTLE CODE
     }
+
+    public Kyle[] generateVillains(Map map) {
+
+        int size = map.getSize();
+        String[][] layout = map.getLayout();
+        int x = map.getX();
+        int y = map.getY();
+        int[][] VillainCoords = new int[size][2];
+        Kyle Villains[] = new Kyle[size];
+        for (int i = 0; i < size; i++) {
+            Villains[i] = new Kyle(this.getLevel(), this.getHP(), this.getXP(), ThreadLocalRandom.current().nextInt(this.getAttack() - 50, this.getAttack() - 25), ThreadLocalRandom.current().nextInt(this.getDefense() - 75, this.getDefense() - 50), "V");
+            int rdm_x = x;
+            int rdm_y = y;
+            while (rdm_x == x || rdm_y == y) {
+                rdm_x = ThreadLocalRandom.current().nextInt(0, size);
+                rdm_y = ThreadLocalRandom.current().nextInt(0, size);
+                if (layout[rdm_y][rdm_x] != ".") {
+                    rdm_x = x;
+                    rdm_y = y;
+                }
+            }
+            map.setLayout(rdm_y, rdm_x, Villains[i].getType()) ;
+            VillainCoords[i][0] = rdm_x;
+            VillainCoords[i][1] = rdm_y;
+            layout[y][x] = this.getType();
+        }
+        Villains[0].setVillainCoords(VillainCoords);
+        return Villains;
+    }
 }
+

@@ -4,7 +4,6 @@ package Model.Characters;
 import Model.Characters.Heroes.Harry;
 import Model.filehandling.ReadFile;
 import Model.filehandling.WriteFile;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;

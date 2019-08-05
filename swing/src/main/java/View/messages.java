@@ -6,8 +6,8 @@ import Model.Characters.utils;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class messages {
 
+public class messages {
 
 utils Utils;
 
@@ -59,7 +59,7 @@ utils Utils;
             System.out.println("Working Directory = " +
                     System.getProperty("user.dir") + "\n");
 //            Scanner scan = new Scanner(System.in);
-            Hero = new Harry(1, 1000, 1000);
+            Hero = new Harry();
             Utils.getUtils().SaveNewPlayer(Hero);
 //            System.out.printf("WELCOME TO HOGWARTS %s%n", String.valueOf(Model.Characters.Heroes.Hero.getClass()).substring(String.valueOf(Hero.getClass()).lastIndexOf('.') + 1));
             System.out.printf("WELCOME \n");

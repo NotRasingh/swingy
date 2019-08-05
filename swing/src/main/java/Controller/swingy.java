@@ -52,9 +52,11 @@ public class swingy {
 //END GENERATE VILLAINS        //////////////////////////////////////////////////////////////////////
 
 //START GAME LOOP       //////////////////////////////////////////////////////////////
+        boolean Collision = false;
         while (gameActive) {
-            if (layout[y][x] != "." && layout[y][x] != "H") {
+            if (layout[y][x] != "." && !layout[y][x].equals("H")) {
                 System.out.println("BATTLE[B] OR RUN[R]");
+                Collision = true;
 
             } else {
                 layout[y][x] = Hero.getType();
@@ -71,37 +73,67 @@ public class swingy {
             int fighter = 0;
             run = false;
             String move = in.next();
+            System.out.println("THIS IS MOVE: " + move);
             ///// BATTLE STARTS
-            if (move.equals("b")) {
-                Messages.PrintStartBattle();
-                /// COMMENCE BATTLE HERE
-                for (int i = 0; i < size; i++) {
-                    if (x == VillainCoords[i][0] && y == VillainCoords[i][1]) {
-                        fighter = i;
-                        break;
-                    }
-                }
-                Messages.PrintVilStats(Villains[fighter].getAttack(), Villains[fighter].getDefense());
-                run = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y, x, y, size);
-            }
-            if (move.equals("r")) {
-                int chance = ThreadLocalRandom.current().nextInt(1, 100);
-                ;
-                if (chance % 2 == 0) {
-                    System.out.println("*FLEES THE SCENE*");
-                    run = true;
-                    x = old_x;
-                    y = old_y;
-                } else {
+            while (Collision) {
+                if (move.equals("b")) {
+                    Messages.PrintStartBattle();
+                    /// COMMENCE BATTLE HERE
                     for (int i = 0; i < size; i++) {
                         if (x == VillainCoords[i][0] && y == VillainCoords[i][1]) {
                             fighter = i;
                             break;
                         }
                     }
-                    System.out.println("NAH FAM");
                     Messages.PrintVilStats(Villains[fighter].getAttack(), Villains[fighter].getDefense());
-                    run = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y, x, y, size);
+                    map = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y);
+                    run = true;
+                    if (size < map.getSize()){
+                        size = map.getSize();
+                        layout = map.getLayout();
+                        Villains = Hero.generateVillains(map);
+                        VillainCoords = Villains[0].getVillainCoords();
+                        y = map.getY();
+                        x = map.getX();
+                    }
+                    Collision = false;
+                    break;
+                }
+                if (move.equals("r")) {
+                    int chance = ThreadLocalRandom.current().nextInt(1, 100);
+                    ;
+                    if (chance % 2 == 0) {
+                        System.out.println("*FLEES THE SCENE*");
+                        run = true;
+                        x = old_x;
+                        y = old_y;
+                    } else {
+                        for (int i = 0; i < size; i++) {
+                            if (x == VillainCoords[i][0] && y == VillainCoords[i][1]) {
+                                fighter = i;
+                                break;
+                            }
+                        }
+                        System.out.println("NAH FAM");
+                        Messages.PrintVilStats(Villains[fighter].getAttack(), Villains[fighter].getDefense());
+                        map = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y);
+                        run = true;
+                        if (size < map.getSize()){
+                            size = map.getSize();
+                            layout = map.getLayout();
+                            Villains = Hero.generateVillains(map);
+                            VillainCoords = Villains[0].getVillainCoords();
+                        y = map.getY();
+                        x = map.getX();
+                        }
+                    }
+                    Collision = false;
+                    break;
+                } else {
+
+                    System.out.println("INVALID INPUT");
+                    System.out.println("BATTLE[B] OR RUN[R]");
+                    move = in.next();
                 }
             }
             old_y = y;
@@ -109,17 +141,21 @@ public class swingy {
             if (move.equals("1")) { //quits
                 gameActive = false;
             }
-            if (move.equals("w")) { //movement commands
+            else if (move.equals("w")) { //movement commands
                 y--;
             }
-            if (move.equals("s")) {
+            else if (move.equals("s")) {
                 y++;
             }
-            if (move.equals("a")) {
+            else if (move.equals("a")) {
                 x--;
             }
-            if (move.equals("d")) {
+            else if (move.equals("d")) {
                 x++;
+            }
+            else
+            {
+                System.out.println("INVALID MOVE");
             }
         }
 //END GAME LOOP          ///////////////////////////////////////////////////////////////////////

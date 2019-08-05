@@ -9,6 +9,10 @@ public class Map {
 
     static public int size;
     static public String[][] Layout;
+    int x;
+    int y;
+
+
 
     public Map(int level){
         this.size = CalculateMapSize(level);
@@ -21,6 +25,10 @@ public class Map {
 
     public String[][] getLayout(){
         return (this.Layout);
+    }
+
+    public void setLayout(int y, int x, String Vill){
+        this.Layout[y][x] = Vill;
     }
 
     public static int CalculateMapSize(int level){
