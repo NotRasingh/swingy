@@ -4,26 +4,33 @@ import Model.Characters.character;
 import Model.Characters.Villains.Kyle;
 import Model.Characters.utils;
 import Model.Map.Map;
+import View.messages;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Getter
+@Setter
 public class Harry extends character {
 
     utils Utils;
     private int HeroCoordinates[] = new int[2];
-    String Weapon;
+    private String Weapon;
+    private String Name;
 
 
     public Harry() {
-        super(1,  1000, 1000, 600, 400, "H");
+        super(1, 1000, 1000, 600, 400, "H");
         this.Weapon = "Wand";
     }
 
 
-    public Harry(int level, int HP, int XP, int Attack, int Defense, String Type) {
+    public Harry(String Name, int level, int HP, int XP, int Attack, int Defense, String Type) {
         super(level, HP, XP, Attack, Defense, Type);
         this.Weapon = "Wand";
+        this.Name = Name;
     }
 
 //    public Harry() {
@@ -52,14 +59,14 @@ public class Harry extends character {
 
 
     public Map fight(Kyle Vil, int[][] VillainCoords, int fighter, Map map, int old_x, int old_y) {
-        int hit = 1;
+        int hit = ThreadLocalRandom.current().nextInt(0, 1);
+        messages Messages = new messages();
         String[][] layout = map.getLayout();
         while (this.getHP() > 0 && Vil.getHP() > 0) {
-            System.out.println(" HERO Remaining Health: " + this.getHP() + "      VILLAIN HEALTH: " + Vil.getHP());
+            Messages.Health(this, Vil);
             if (hit == 1) {
                 if (Vil.getDefense() > 0) {
-
-                    System.out.println("Remaining VILLAIN Defense: " + Vil.getDefense());
+                    Messages.VillainDefense(Vil);
                     Vil.setDefense(Vil.getDefense() - this.getAttack());
                 } else {
                     if (Vil.getDefense() < 0) {
@@ -71,11 +78,11 @@ public class Harry extends character {
                 hit = 0;
             } else {
                 if (this.getDefense() > 0) {
-                    System.out.println("Remaining HERO Defense: " + this.getDefense());
+                    Messages.HeroDefense(this);
                     this.setDefense(this.getDefense() - Vil.getAttack());
                 } else {
                     if (this.getDefense() < 0) {
-                        System.out.println(this.getDefense());
+//                        System.out.println(this.getDefense());
                         this.setHP(this.getHP() + this.getDefense());
                         this.setDefense(0);
                     }
@@ -85,69 +92,64 @@ public class Harry extends character {
             }
         }
         if (this.getHP() <= 0) {
-            System.out.println("U DEAD");
+            Messages.Dead();
             this.setHP(1000);
             Utils.getUtils().SavePlayer(this);
             System.exit(0);
         }
-        if (this.getDefense() < 0){
+        if (this.getDefense() < 0) {
             this.setDefense(0);
         }
         if (Vil.getHP() <= 0) {
 
             int artifact = 0;
-            System.out.println("Remaining Health: " + this.getHP());
-            System.out.println("U WIN");
+            Messages.WinBattle(this);
             layout[VillainCoords[fighter][1]][VillainCoords[fighter][0]] = this.getType();
             layout[old_y][old_x] = ".";
             //run = true; MIGHT BE IMPORTANT
             this.setXP(this.getXP() + (Vil.getAttack()));
-            System.out.println("New XP: " + this.getXP());
+            Messages.NewXP(this);
             if (ThreadLocalRandom.current().nextInt(0, 100) % 2 == 0) {
-//                        long incAttack = ThreadLocalRandom.current().nextLong(Math.round(Hero.getAttack() * 0.10) ,Math.round(Hero.getAttack() * 0.25 ));
-//                        long incDefense = ThreadLocalRandom.current().nextLong(Math.round(Hero.getDefense() * 0.10) ,Math.round(Hero.getDefense() * 0.25 ));
-//                        long incHP = ThreadLocalRandom.current().nextLong(Math.round(Hero.getHP() * 0.10) ,Math.round(Hero.getHP() * 0.25 ));
-                System.out.println("Raid the Villains lifeless body.");
-                System.out.println("Pick one of the 3 artifacts below: ");
-                System.out.println("[1] Weapon : Increase attack by 150");
-                System.out.println("[2]Armor : Increase defense by 150");
-                System.out.println("[3]Helm : Increase HP by 150");
+                Messages.PickArtifact();
                 Scanner scan = new Scanner(System.in);
                 String first = scan.next();
-//                System.out.println("FIRST SCAN : "+ first);
-//                System.out.println("MOVE SCAN : "+ move);
-                if (first.equals("1")) {
-                    System.out.println("OLD ATTACK: " + this.getAttack());
-                    this.setAttack(this.getAttack() + 150);
-                    System.out.println("New ATTACK: " + this.getAttack());
-                }
-                if (first.equals("2")) {
-                    System.out.println("OLD DEFENSE: " + this.getDefense());
-                    this.setDefense(this.getDefense() + 150);
-                    System.out.println("NEW DEFENSE: " + this.getDefense());
-                }
-                if (first.equals("3")) {
-                    System.out.println("OLD HP: " + this.getHP());
-                    this.setHP(this.getHP() + 150);
-                    System.out.println("NEW HP: " + this.getHP());
+                while (true) {
+                    if (first.equals("1")) {
+                        Messages.OldAttack(this);
+                        this.setAttack(this.getAttack() + 150);
+                        Messages.NewAttack(this);
+
+                        break;
+                    } else if (first.equals("2")) {
+                        Messages.OldDefense(this);
+                        this.setDefense(this.getDefense() + 150);
+                        Messages.NewDefense(this);
+                        break;
+                    } else if (first.equals("3")) {
+                        Messages.OldHP(this);
+                        this.setHP(this.getHP() + 150);
+                        Messages.NewHP(this);
+                        break;
+                    } else
+                        Messages.InvalidInput();
                 }
             }
             if (this.getXP() >= (((this.getLevel() + 1) * 1000) + (Math.pow(this.getLevel(), 2) * 450))) {
-                System.out.println("CONGRATULATIONS, YOU LEVELED UP");
+                Messages.Congrats();
                 //REGENERATE MAP AND RECENTER HERO
                 this.setLevel(this.getLevel() + 1);
                 map = new Map(this.getLevel());
                 layout = map.getLayout();
                 int size = map.getSize();
                 map.setX(InitialCoordinates(map.getSize()));
-                int x = map.getX() ;
+                int x = map.getX();
                 map.setY(map.getX());
                 int y = map.getY();
 //REGENERATE VILLAINS FOR LEVEL UP
                 /// UPDATE PLAYERS PROGRESS IN DB/TXTFILE
             }
         }
-         return map;
+        return map;
         /// END BATTLE CODE
     }
 
@@ -171,7 +173,7 @@ public class Harry extends character {
                     rdm_y = y;
                 }
             }
-            map.setLayout(rdm_y, rdm_x, Villains[i].getType()) ;
+            map.setLayout(rdm_y, rdm_x, Villains[i].getType());
             VillainCoords[i][0] = rdm_x;
             VillainCoords[i][1] = rdm_y;
             layout[y][x] = this.getType();

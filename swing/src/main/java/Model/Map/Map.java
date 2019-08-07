@@ -1,5 +1,6 @@
 package Model.Map;
 
+import View.messages;
 import lombok.*;
 
 
@@ -11,7 +12,7 @@ public class Map {
     static public String[][] Layout;
     int x;
     int y;
-
+    messages Messages = new messages();
 
 
     public Map(int level){
@@ -52,9 +53,9 @@ public class Map {
         int length = Layout[0].length;
         for (int i = 0; i < length; ++i) {
             for (int j = 0; j < length; ++j) {
-                System.out.print(this.Layout[i][j]);
+                Messages.printCoord(this.Layout[i][j]);
             }
-            System.out.println("");
+            Messages.printBlank();
         }
     }
 }

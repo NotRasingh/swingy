@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Characters.Heroes.Harry;
 import Model.Characters.Villains.Kyle;
+import Model.Characters.utils;
 import Model.Map.Map;
 import View.messages;
 
@@ -13,11 +14,11 @@ public class swingy {
 
     public static void main(String[] args) {
         messages Messages = new messages();
-        Harry Hero = Messages.Intro();
+        Messages.Intro();
+        utils Util = new utils();
+        Harry Hero = newHero();
 
 //Character Instantiation
-
-//        Harry Hero = new Harry(1, 1000, 1000);///remove when above if stmt is completed
 //Map Instantiation
         Map map = new Map(Hero.getLevel());
         String[][] layout = map.getLayout();
@@ -54,8 +55,20 @@ public class swingy {
 //START GAME LOOP       //////////////////////////////////////////////////////////////
         boolean Collision = false;
         while (gameActive) {
-            if (layout[y][x] != "." && !layout[y][x].equals("H")) {
-                System.out.println("BATTLE[B] OR RUN[R]");
+            if ((x == size - 1 || y == size - 1 || x == 0 || y == 0) && (layout[y][x] == "." || layout[y][x] == Hero.getType())) {
+                layout[y][x] = Hero.getType();
+                if (!run) {
+                    layout[old_y][old_x] = ".";
+                }
+                Util.clearScreen();
+                map.PrintMap();
+                Messages.PrintWinMessage(Hero);
+                /// SAVE PLAYERS PROGRESS
+                System.exit(0);
+            }
+            if (layout[y][x] != "." && !layout[y][x].equals(Hero.getType())) {
+
+                Messages.BattleOrRun();
                 Collision = true;
 
             } else {
@@ -63,17 +76,13 @@ public class swingy {
                 if (!run) {
                     layout[old_y][old_x] = ".";
                 }
+                Util.clearScreen();
                 map.PrintMap();
             }
-            if ((x == size - 1 || y == size - 1 || x == 0 || y == 0) && (layout[y][x] == "." || layout[y][x] == "H")) {
-                Messages.PrintWinMessage(Hero);
-                /// SAVE PLAYERS PROGRESS
-                System.exit(0);
-            }
+
             int fighter = 0;
             run = false;
             String move = in.next();
-            System.out.println("THIS IS MOVE: " + move);
             ///// BATTLE STARTS
             while (Collision) {
                 if (move.equals("b")) {
@@ -88,7 +97,7 @@ public class swingy {
                     Messages.PrintVilStats(Villains[fighter].getAttack(), Villains[fighter].getDefense());
                     map = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y);
                     run = true;
-                    if (size < map.getSize()){
+                    if (size < map.getSize()) {
                         size = map.getSize();
                         layout = map.getLayout();
                         Villains = Hero.generateVillains(map);
@@ -96,6 +105,7 @@ public class swingy {
                         y = map.getY();
                         x = map.getX();
                     }
+                    move = "battle";
                     Collision = false;
                     break;
                 }
@@ -103,7 +113,7 @@ public class swingy {
                     int chance = ThreadLocalRandom.current().nextInt(1, 100);
                     ;
                     if (chance % 2 == 0) {
-                        System.out.println("*FLEES THE SCENE*");
+                        Messages.Flee();
                         run = true;
                         x = old_x;
                         y = old_y;
@@ -114,50 +124,97 @@ public class swingy {
                                 break;
                             }
                         }
-                        System.out.println("NAH FAM");
+                        Messages.Nah();
                         Messages.PrintVilStats(Villains[fighter].getAttack(), Villains[fighter].getDefense());
                         map = Hero.fight(Villains[fighter], VillainCoords, fighter, map, old_x, old_y);
                         run = true;
-                        if (size < map.getSize()){
+                        if (size < map.getSize()) {
                             size = map.getSize();
                             layout = map.getLayout();
                             Villains = Hero.generateVillains(map);
                             VillainCoords = Villains[0].getVillainCoords();
-                        y = map.getY();
-                        x = map.getX();
+                            y = map.getY();
+                            x = map.getX();
                         }
                     }
+                    move = "battle";
                     Collision = false;
                     break;
                 } else {
 
-                    System.out.println("INVALID INPUT");
-                    System.out.println("BATTLE[B] OR RUN[R]");
+                    Messages.InvalidInput();
+                    Messages.BattleOrRun();
                     move = in.next();
                 }
             }
-            old_y = y;
-            old_x = x;
             if (move.equals("1")) { //quits
                 gameActive = false;
-            }
-            else if (move.equals("w")) { //movement commands
+            } else if (move.equals("w")) { //movement commands
+                old_y = y;
+                old_x = x;
                 y--;
-            }
-            else if (move.equals("s")) {
+            } else if (move.equals("s")) {
+                old_y = y;
+                old_x = x;
                 y++;
-            }
-            else if (move.equals("a")) {
+            } else if (move.equals("a")) {
+                old_y = y;
+                old_x = x;
                 x--;
-            }
-            else if (move.equals("d")) {
+            } else if (move.equals("d")) {
+                old_y = y;
+                old_x = x;
                 x++;
-            }
-            else
-            {
-                System.out.println("INVALID MOVE");
+            } else if (move.equals("battle")) {
+                move = " ";
+                old_y = y;
+                old_x = x;
+            } else {
+                Messages.InvalidInput();
             }
         }
 //END GAME LOOP          ///////////////////////////////////////////////////////////////////////
+    }
+
+    public static Harry newHero() {
+
+        utils Utils = new utils();
+        messages Messages = new messages();
+        Harry Hero;
+        Scanner scan = new Scanner(System.in);
+
+        while (true) {
+            String first = scan.next();
+            if (first.equals("1")) {
+                Messages.PickHero();
+
+                while (true) {
+                    String Second = scan.next();
+                    if (Second.equals("1")) {
+                        Hero = new Harry("Harry", 1, 1000, 1000, 600, 400, "H");
+                        break;
+                    } else if (Second.equals("2")) {
+                        Hero = new Harry("Ron", 1, 900, 1000, 500, 300, "R");
+                        break;
+                    } else if (Second.equals("3")) {
+                        Hero = new Harry("Hermoine", 1, 1250, 1000, 400, 600, "G");
+                        break;
+                    } else {
+                        Messages.InvalidInput();
+                    }
+                }
+
+                Utils.getUtils().SaveNewPlayer(Hero);
+                break;
+            } else if (first.equals("2")) {
+                String[] Stats = Utils.LoadPlayer();
+                Hero = new Harry(Stats[0], Integer.parseInt(Stats[1]), Integer.parseInt(Stats[2]), Integer.parseInt(Stats[3]), Integer.parseInt(Stats[4]), Integer.parseInt(Stats[5]), Stats[6]);
+                break;
+            } else {
+                Messages.InvalidInput();
+            }
+        }
+        Messages.quit();
+        return (Hero);
     }
 }

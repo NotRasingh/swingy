@@ -4,7 +4,10 @@ package Model.Characters;
 import Model.Characters.Heroes.Harry;
 import Model.filehandling.ReadFile;
 import Model.filehandling.WriteFile;
+import View.messages;
+
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -15,7 +18,7 @@ public class utils {
     String Name;
     //    private static utils = new utils();
     static private utils Utils = new utils();
-
+    messages Messages = new messages();
 
     public void SaveNewPlayer(Harry hero) {
         Scanner scan = new Scanner(System.in);
@@ -23,13 +26,16 @@ public class utils {
 
             ReadFile file = new ReadFile("GameProgress");
             String[] aryLines = file.OpenFile();
-            System.out.println("Enter your Hero name: \n");
+
+            Messages.EnterName();
             this.Name = scan.next();
+            hero.setName(this.Name);
             int i = 0;
             while (i < aryLines.length) {
                 if (aryLines[i].contains(this.Name + ',')) {
-                    System.out.println("Name is Taken Enter a new name: ");
+                    Messages.NameTaken();
                     this.Name = scan.next();
+                    hero.setName(this.Name);
                     i = 0;
                 }
                 i++;
@@ -37,29 +43,32 @@ public class utils {
             //WRITING NEW NAME TO FILE
             WritePlayer(hero);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            Messages.FileException(e.getMessage());
         }
-//        System.out.println("THIS NAME : " + this.Name);
     }
 
     public static utils getUtils() {
         return Utils;
     }
 
+    public void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     public void SavePlayer(Harry hero) {
 
 //        Arrays.toString(hero);
-        System.out.println("NEW STATS: " + hero.getLevel() + ',' + hero.getHP() + ',' + hero.getXP() + ',' + hero.getAttack() + ',' + hero.getDefense() + ',' + hero.getType());
+//        System.out.println("NEW STATS: " + hero.getLevel() + ',' + hero.getHP() + ',' + hero.getXP() + ',' + hero.getAttack() + ',' + hero.getDefense() + ',' + hero.getType());
         int i = 0;
         try {
             ReadFile file = new ReadFile("GameProgress");
             String[] aryLines = file.OpenFile();
-            System.out.println("THIS NAME : " + this.Name);
+//            System.out.println("THIS NAME : " + hero.getName());
             while (i < aryLines.length) {
-                if (aryLines[i].contains(this.Name + ',')) {
-                    System.out.println("FOUND THE ONE FOR ME");
+                if (aryLines[i].contains(hero.getName() + ',')) {
 //                    WritePlayer(hero);
-                    aryLines[i] = this.Name + ',' + hero.getLevel() + ',' + hero.getHP() + ',' + hero.getXP() + ',' + hero.getAttack() + ',' + hero.getDefense() + ',' + hero.getType();
+                    aryLines[i] = hero.getName() + ',' + hero.getLevel() + ',' + hero.getHP() + ',' + hero.getXP() + ',' + hero.getAttack() + ',' + hero.getDefense() + ',' + hero.getType();
                 }
                 i++;
             }
@@ -70,13 +79,14 @@ public class utils {
                 try {
                     data.writeToFile(aryLines[i]);
                 } catch (IOException e) {
-                    System.out.println(e.getMessage());
+                    Messages.FileException(e.getMessage());
                 }
                 i++;
             }
             //WRITING NAME TO FILE
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            Messages.FileException(e.getMessage());
+
         }
 
     }
@@ -87,7 +97,7 @@ public class utils {
             String PlayerStats = this.Name + ',' + hero.getLevel() + ',' + hero.getHP() + ',' + hero.getXP() + ',' + hero.getAttack() + ',' + hero.getDefense() + ',' + hero.getType();
             data.writeToFile(PlayerStats);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            Messages.FileException(e.getMessage());
         }
     }
 
@@ -107,7 +117,7 @@ public class utils {
             }
             boolean tru = true;
             while (tru) {
-                System.out.println("Enter Number of the Player you wish to load");
+                Messages.LoadPlayer();
                 Load = Integer.parseInt(scan.next());
                 if (Load > 0 && Load <= aryLines.length) {
                     break;
@@ -122,9 +132,9 @@ public class utils {
             Stats.put("attack",Stat[4]);
             Stats.put("defense",Stat[5]);
             Stats.put("char",Stat[6]);
-            System.out.println(Arrays.toString(Stat));
+            Messages.PrintStat(Arrays.toString(Stat));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            Messages.FileException(e.getMessage());
         }
         return (Stat);
     }
